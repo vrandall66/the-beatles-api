@@ -7,6 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.set('port', process.env.PORT || 3000);
+app.locals.title = 'The Beatles api';
 
 app.listen(app.get('port'), () => {
   console.log(
