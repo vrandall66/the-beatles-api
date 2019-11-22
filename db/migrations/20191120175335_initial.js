@@ -2,25 +2,25 @@ exports.up = function(knex) {
   return Promise.all([
     knex.schema.createTable('albums', function(table) {
       table.increments('id').primary();
-      table.string('album_id');
-      table.string('album_name');
-      table.string('track_count');
-      table.string('release_date');
+      table.string('albumId');
+      table.string('albumName');
+      table.string('trackCount');
+      table.string('releaseDate');
       table.string('genre');
-      table.string('collection_id');
 
       table.timestamps(true, true);
     }),
     knex.schema.createTable('songs', function(table) {
       table.increments('id').primary();
-      table.string('track_name');
-      table.string('album_name');
-      table.string('disc_number');
-      table.string('track_number');
-      table.string('collection_id');
+      table.string('trackName');
+      table.string('albumId');
+      table.string('albumName');
+      table.string('discNumber');
+      table.string('trackNumber');
+      table.string('trackTimeMillis');
 
-      table.integer('album_id').unsigned();
-      table.foreign('album_id').references('albums.id');
+      // table.integer('albumId').unsigned();
+      // table.foreign('albumId').references('albums.albumId');
 
       table.timestamps(true, true);
     })

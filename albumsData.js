@@ -1,4 +1,4 @@
-[
+const albumsData = [
   {
     "collectionType": "Album",
     "artistId": 136975,
@@ -457,3 +457,5 @@
     "primaryGenreName": "Rock"
   }
 ]
+
+module.exports = albumsData;
