@@ -6,9 +6,9 @@ const createAlbum = (knex, album) => {
     {
       albumId: album.collectionId,
       albumName: album.collectionName,
-      trackCount: album.trackCount,
+      genre: album.primaryGenreName,
       releaseDate: album.releaseDate,
-      genre: album.primaryGenreName
+      trackCount: album.trackCount
     },
     'id'
   );
@@ -17,10 +17,11 @@ const createAlbum = (knex, album) => {
 const createSong = (knex, song) => {
   return knex('songs').insert(
     {
-      trackName: song.trackName,
-      albumId: song.collectionId,
+      album: song.collectionId,
       albumName: song.albumName,
       discNumber: song.discNumber,
+      trackId: song.trackId,
+      trackName: song.trackName,
       trackNumber: song.trackNumber,
       trackTimeMillis: song.trackTimeMillis
     },
@@ -29,22 +30,22 @@ const createSong = (knex, song) => {
 };
 
 exports.seed = function(knex) {
-  return knex('songs')
+  return knex('albums')
     .del()
-    .then(() => {
-      const promisedSongs = [];
-      songsData.forEach(song => {
-        promisedSongs.push(createSong(knex, song));
-      });
-      return Promise.all(promisedSongs);
-    })
-    .then(() => knex('albums').del())
     .then(() => {
       const promisedAlbums = [];
       albumsData.forEach(album => {
         promisedAlbums.push(createAlbum(knex, album));
       });
       return Promise.all(promisedAlbums);
+    })
+    .then(() => knex('songs').del())
+    .then(() => {
+      const promisedSongs = [];
+      songsData.forEach(song => {
+        promisedSongs.push(createSong(knex, song));
+      });
+      return Promise.all(promisedSongs);
     })
     .catch(err => console.log(`Error seeding data: ${err}`));
 };
