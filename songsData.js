@@ -484,7 +484,6 @@ const songsData = [
     collectionName: 'Please Please Me',
     trackName: 'Twist and Shout',
     releaseDate: '1963-03-22T12:00:00Z',
-    trackExplicitness: 'notExplicit',
     discCount: 1,
     discNumber: 1,
     trackCount: 14,
