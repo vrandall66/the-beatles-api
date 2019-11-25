@@ -12,7 +12,7 @@ app.locals.title = 'The Beatles api';
 
 app.get('/', (request, response) => {
   response.send(
-    '<h1>Welcome to the Beatles API!</h1>' +
+    '<h1>Welcome to The Beatles API!</h1>' +
       '<h3>To get all albums (including anniversary albums):</h3>' +
       '<p>Go to: /api/v1/albums</p>' +
       '<h3>To get all songs (currently available on the database):</h3>' +
