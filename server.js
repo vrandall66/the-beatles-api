@@ -38,6 +38,34 @@ app.get('/api/v1/albums/:id', (request, response) => {
     });
 });
 
+app.get('/api/v1/songs', (request, response) => {
+  database('songs')
+    .select()
+    .then(songs => {
+      response.status(200).json(songs);
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
+});
+
+app.get('/api/v1/songs/:id', (request, response) => {
+  const { id } = request.params;
+  database('songs')
+    .where({ trackId: id })
+    .then(song => {
+      if (song.length === 0) {
+        response
+          .status(404)
+          .json({ error: `There is not a song with the id of ${id}` });
+      }
+      response.status(200).json(song[0]);
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
+});
+
 app.listen(app.get('port'), () => {
   console.log(
     `${app.locals.title} is running on http://localhost:${app.get('port')}`

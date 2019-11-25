@@ -18,7 +18,7 @@ const createSong = (knex, song) => {
   return knex('songs').insert(
     {
       album: song.collectionId,
-      albumName: song.albumName,
+      albumName: song.collectionName,
       discNumber: song.discNumber,
       trackId: song.trackId,
       trackName: song.trackName,
