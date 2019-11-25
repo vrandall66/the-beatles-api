@@ -38,7 +38,7 @@ app.get('/', (request, response) => {
 });
 
 app.get('/api/v1/albums', (request, response) => {
-  // When a user visits /api/v1/albums using a GET request,
+  // When a user visits /api/v1/albums endpoint using a GET request,
   database('albums')
     // Go to the albums table
     .select()
@@ -54,9 +54,9 @@ app.get('/api/v1/albums', (request, response) => {
 });
 
 app.get('/api/v1/albums/:id', (request, response) => {
-  // When a user visits the /api/v1/albums/:id using a GET request,
+  // When a user visits the /api/v1/albums/:id endpoint using a GET request,
   const { id } = request.params;
-  // destructuring the id key out of the params object
+  // destructuring the id out of the params
   database('albums')
     // Go to the albums table
     .where({ albumId: id })
@@ -78,7 +78,7 @@ app.get('/api/v1/albums/:id', (request, response) => {
 });
 
 app.get('/api/v1/songs', (request, response) => {
-  // When a user visits /api/v1/songs using a GET request,
+  // When a user visits /api/v1/songs endpoint using a GET request,
   database('songs')
     // Go to the songs table
     .select()
@@ -94,9 +94,9 @@ app.get('/api/v1/songs', (request, response) => {
 });
 
 app.get('/api/v1/songs/:id', (request, response) => {
-  // When a user visits the /api/v1/songs/:id using a GET request,
+  // When a user visits the /api/v1/songs/:id endpoint using a GET request,
   const { id } = request.params;
-  // Destructuring the id key out of the params object
+  // Destructuring the id out of the params
   database('songs')
     // Go to the songs table
     .where({ trackId: id })
@@ -114,36 +114,36 @@ app.get('/api/v1/songs/:id', (request, response) => {
     .catch(error => {
       response.status(500).json({ error });
     });
-    // Send a failed response status code and json the error response
+  // Send a failed response status code and json the error response
 });
 
 app.post('/api/v1/albums', (request, response) => {
+  // When a user visits the /api/v1/albums endpoint using a POST request,
   const album = request.body;
-  const { albumName, genre, releaseDate, trackCount } = album;
+  // Destructuring album from the request body
   for (let key of ['albumName', 'genre', 'releaseDate', 'trackCount']) {
+    // iterate through keys of the album request
     if (!album[key]) {
-      return response
-        .status(422)
-        .send({ error: `POST failed, missing required key: ${key}` });
+      return response.status(422).send({
+        error: `POST failed, missing required key: ${key}`
+      });
     }
+    // If there is a missing key for the POST request, send an unsuccessful response status code and a string of "POST failed, missing required key: key"
   }
   database('albums')
+    // Go to the albums table
     .insert(album, 'id')
+    // Add the new album, increment another id for that album on the table
     .then(id => response.status(201).json({ albumId: id[0], ...album }))
+    // Send a successful status code and display the new album from the response array at index 0 in json format
     .catch(error => response.status(500).json({ error }));
+  // Send a failed response status code and json the error response
 });
 
 app.post('/api/v1/songs', (request, response) => {
+  // When a user visits the /api/v1/songs endpoint using a POST request,
   const song = request.body;
-  const {
-    album,
-    albumName,
-    discNumber,
-    trackId,
-    trackName,
-    trackNumber,
-    trackTimeMillis
-  } = song;
+  // Destructuring the song from the request body
   for (let key of [
     'album',
     'albumName',
@@ -152,55 +152,81 @@ app.post('/api/v1/songs', (request, response) => {
     'trackName',
     'trackNumber',
     'trackTimeMillis'
+    // iterate through keys of the song request
   ]) {
     if (!song[key]) {
       return response
         .status(422)
         .send({ error: `POST failed, missing required key: ${key}` });
     }
+    // If there is a missing key for the POST request, send an unsuccessful response status code and a string of "POST failed, missing required key: key"
   }
   database('songs')
+    // Go to the songs table
     .insert(song, 'id')
+    // Add the new song, increment another id for that song on the table
     .then(id => response.status(201).json({ trackId: id[0], ...song }))
+    // Send a successful status code and display the new album from the response array at index 0 in json format
     .catch(error => response.status(500).json({ error }));
+  // Send a failed response status code and json the error response
 });
 
 app.delete('/api/v1/albums/:id', (request, response) => {
+  // When a user visits the /api/v1/albums/:id endpoint using a DELETE request,
   const { id } = request.params;
+  // Destructuring the id from the request params
   database('albums')
+    // Go to the albums table
     .where({ albumId: id })
+    // Find the albumId that matches the id from the request
     .select()
+    // Grab that album
     .del()
+    // Delete that album from the albums table
     .then(results => {
       if (results === 0) {
         response.status(404).json(`No album found with the id of ${id}`);
       }
+      // If there is not an album with a matching id, send an unsuccessful response status code with the string of "No album found with the id of id"
       response.status(200).json(`Album ${id} sucessfully deleted.`);
     })
+    // Send a successful status code with the string of "Album id sucessfully deleted."
     .catch(error => {
       response.status(404).json({ error });
     });
+  // Send an unsuccessful status code with the error in json format
 });
 
 app.delete('/api/v1/songs/:id', (request, response) => {
+  // Whena  user visits the /api/v1/songs/:id endpoint using a DELETE request,
   const { id } = request.params;
+  // Destructuring the id from the request params
   database('songs')
+    // Go to the songs table
     .where({ trackId: id })
+    // Find the trackId that matches the id from the request
     .select()
+    // Grab that song
     .del()
+    // Delete that song from the songs table
     .then(results => {
       if (results === 0) {
         response.status(404).json(`No song found with the id of ${id}`);
       }
+      // If there is not a song with a matching id, send an unsuccessful response status code with the string of "No song found with the id of id"
       response.status(200).json(`Song ${id} sucessfully deleted.`);
     })
+    // Send a successful status code with the string of "Song id successfully deleted."
     .catch(error => {
       response.status(404).json({ error });
     });
+  // Send an unsuccessful status code with the error in json format
 });
 
 app.listen(app.get('port'), () => {
+  // When the app port is up and running
   console.log(
     `${app.locals.title} is running on http://localhost:${app.get('port')}`
   );
+  // Console log the name of the app and the port it is currently locally running on
 });
