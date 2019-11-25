@@ -10,6 +10,10 @@ app.use(express.json());
 app.set('port', process.env.PORT || 3000);
 app.locals.title = 'The Beatles api';
 
+app.get('/', (request, response) => {
+  response.send('Welcome to the Beatles API!');
+});
+
 app.get('/api/v1/albums', (request, response) => {
   database('albums')
     .select()
@@ -112,6 +116,40 @@ app.post('/api/v1/songs', (request, response) => {
     .insert(song, 'id')
     .then(id => response.status(201).json({ trackId: id[0], ...song }))
     .catch(error => response.status(500).json({ error }));
+});
+
+app.delete('/api/v1/albums/:id', (request, response) => {
+  const { id } = request.params;
+  database('albums')
+    .where({ albumId: id })
+    .select()
+    .del()
+    .then(results => {
+      if (results === 0) {
+        response.status(404).json(`No album found with the id of ${id}`);
+      }
+      response.status(200).json(`Album ${id} sucessfully deleted.`);
+    })
+    .catch(error => {
+      response.status(404).json({ error });
+    });
+});
+
+app.delete('/api/v1/songs/:id', (request, response) => {
+  const { id } = request.params;
+  database('songs')
+    .where({ trackId: id })
+    .select()
+    .del()
+    .then(results => {
+      if (results === 0) {
+        response.status(404).json(`No song found with the id of ${id}`);
+      }
+      response.status(200).json(`Song ${id} sucessfully deleted.`);
+    })
+    .catch(error => {
+      response.status(404).json({ error });
+    });
 });
 
 app.listen(app.get('port'), () => {
