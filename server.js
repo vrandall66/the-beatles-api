@@ -20,7 +20,8 @@ app.get('/', (request, response) => {
       '<h3>To get an album by albumId:</h3>' +
       '<p>Go to: /api/v1/albums/:albumId</p>' +
       '<h3>To get a song by trackId:</h3>' +
-      '<p>Go to: /api/v1/songs/:trackId</p>'
+      '<p>Go to: /api/v1/songs/:trackId</p>' +
+      '<h2>To see the full documentation on this API, go to: https://github.com/vrandall66/the-beatles-api</h2>'
   );
 });
 
