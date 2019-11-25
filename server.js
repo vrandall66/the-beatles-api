@@ -66,6 +66,54 @@ app.get('/api/v1/songs/:id', (request, response) => {
     });
 });
 
+app.post('/api/v1/albums', (request, response) => {
+  const album = request.body;
+  const { albumName, genre, releaseDate, trackCount } = album;
+  for (let key of ['albumName', 'genre', 'releaseDate', 'trackCount']) {
+    if (!album[key]) {
+      return response
+        .status(422)
+        .send({ error: `POST failed, missing required key: ${key}` });
+    }
+  }
+  database('albums')
+    .insert(album, 'id')
+    .then(id => response.status(201).json({ albumId: id[0], ...album }))
+    .catch(error => response.status(500).json({ error }));
+});
+
+app.post('/api/v1/songs', (request, response) => {
+  const song = request.body;
+  const {
+    album,
+    albumName,
+    discNumber,
+    trackId,
+    trackName,
+    trackNumber,
+    trackTimeMillis
+  } = song;
+  for (let key of [
+    'album',
+    'albumName',
+    'discNumber',
+    'trackId',
+    'trackName',
+    'trackNumber',
+    'trackTimeMillis'
+  ]) {
+    if (!song[key]) {
+      return response
+        .status(422)
+        .send({ error: `POST failed, missing required key: ${key}` });
+    }
+  }
+  database('songs')
+    .insert(song, 'id')
+    .then(id => response.status(201).json({ trackId: id[0], ...song }))
+    .catch(error => response.status(500).json({ error }));
+});
+
 app.listen(app.get('port'), () => {
   console.log(
     `${app.locals.title} is running on http://localhost:${app.get('port')}`
