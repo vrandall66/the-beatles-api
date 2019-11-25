@@ -30,6 +30,10 @@ Open localhost://3000/
 - PostgreSQL
 - Knex.js
 
+### Project Management Board
+
+[Can be found here](https://trello.com/b/2q9ihrVU/byob)
+
 ### Endpoints
 
 | URL                                                       | Type   | Options                                                                                                                                                                      | Expected response                                                                                                  |
