@@ -11,7 +11,17 @@ app.set('port', process.env.PORT || 3000);
 app.locals.title = 'The Beatles api';
 
 app.get('/', (request, response) => {
-  response.send('Welcome to the Beatles API!');
+  response.send(
+    '<h1>Welcome to the Beatles API!</h1>' +
+      '<h3>To get all albums (including anniversary albums):</h3>' +
+      '<p>Go to: /api/v1/albums</p>' +
+      '<h3>To get all songs (currently available on the database):</h3>' +
+      '<p>Go to: /api/v1/songs</p>' +
+      '<h3>To get an album by albumId:</h3>' +
+      '<p>Go to: /api/v1/albums/:albumId</p>' +
+      '<h3>To get a song by trackId:</h3>' +
+      '<p>Go to: /api/v1/songs/:trackId</p>'
+  );
 });
 
 app.get('/api/v1/albums', (request, response) => {
