@@ -4,6 +4,7 @@ const app = express();
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
+const path = require('path');
 
 app.use(cors());
 app.use(express.json());
@@ -11,18 +12,7 @@ app.set('port', process.env.PORT || 3000);
 app.locals.title = 'The Beatles api';
 
 app.get('/', (request, response) => {
-  response.send(
-    '<h1>Welcome to The Beatles API!</h1>' +
-      '<h3>To get all albums (including anniversary albums):</h3>' +
-      '<p>Go to: /api/v1/albums</p>' +
-      '<h3>To get all songs (currently available on the database):</h3>' +
-      '<p>Go to: /api/v1/songs</p>' +
-      '<h3>To get an album by albumId:</h3>' +
-      '<p>Go to: /api/v1/albums/:albumId</p>' +
-      '<h3>To get a song by trackId:</h3>' +
-      '<p>Go to: /api/v1/songs/:trackId</p>' +
-      '<h2>To see the full documentation on this API, go to: https://github.com/vrandall66/the-beatles-api</h2>'
-  );
+  response.sendFile(path.join(__dirname + '/index.html'));
 });
 
 app.get('/api/v1/albums', (request, response) => {
